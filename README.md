@@ -6,9 +6,9 @@
 *English: a free, zero-server booking system for kids' party venues. A mobile form writes to a Google Sheet and creates Google Calendar events automatically, with availability checks, package pricing, deposit tracking, a ready-to-send Viber/WhatsApp message and a daily email digest. The UI is in Greek; all texts live in `Code.gs` and `Index.html` and are easy to translate.*
 
 <p>
-  <img src="docs/form.png" width="240" alt="Φόρμα νέας κράτησης">
-  <img src="docs/schedule.png" width="240" alt="Πρόγραμμα">
-  <img src="docs/viber.png" width="240" alt="Μήνυμα για τον γονέα">
+  <img src="form.png" width="240" alt="Φόρμα νέας κράτησης">
+  <img src="schedule.png" width="240" alt="Πρόγραμμα">
+  <img src="viber.png" width="240" alt="Μήνυμα για τον γονέα">
 </p>
 
 ## Τι κάνει

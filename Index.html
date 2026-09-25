@@ -201,11 +201,14 @@
         <div id="viberTxt" class="viber"></div>
         <div id="doneWarn" class="busy hidden"></div>
         <div class="btns">
-          <button class="btn gold" id="copyBtn">📋 Αντιγραφή</button>
           <button class="btn green" id="viberBtn">💬 Viber</button>
+          <button class="btn" id="waBtn" style="background:#25a244">🟢 WhatsApp</button>
         </div>
-        <div class="hint">Το «Viber» ανοίγει με <b>έτοιμο το μήνυμα</b>: διάλεξε τον γονέα και πάτα αποστολή.</div>
-        <button class="btn ghost" id="chatBtn" style="margin-top:8px;font-size:14px;padding:10px">📱 Άνοιγμα συνομιλίας με τον γονέα (για επικόλληση)</button>
+        <div class="hint"><b>Viber:</b> αντιγράφει το μήνυμα και ανοίγει τη συνομιλία με τον γονέα. Κράτα το δάχτυλο στο πεδίο γραφής ➜ <b>Επικόλληση</b> ➜ αποστολή.<br><b>WhatsApp:</b> ανοίγει με έτοιμο το μήνυμα, πατάς μόνο αποστολή.</div>
+        <div class="btns">
+          <button class="btn gold" id="copyBtn">📋 Αντιγραφή</button>
+          <button class="btn ghost" id="shareBtn">📤 Κοινοποίηση</button>
+        </div>
         <div style="height:10px"></div>
         <button class="btn ghost" id="newBtn">＋ Νέα κράτηση</button>
       </div>
@@ -467,16 +470,23 @@ function viberNumber(p) {
   return '+' + d;
 }
 function openViber() {
-  var t = $('viberTxt').textContent;
+  var t = $('viberTxt').textContent, n = viberNumber(S.viberPhone);
   copyText(t);
-  setTimeout(function () { window.open('viber://forward?text=' + encodeURIComponent(t), '_top'); }, 300);
+  toast('📋 Το μήνυμα αντιγράφηκε. Στο Viber: παρατεταμένο πάτημα ➜ Επικόλληση', 4500);
+  setTimeout(function () {
+    window.open(n ? 'viber://chat?number=' + encodeURIComponent(n) : 'viber://forward?text=' + encodeURIComponent(t), '_top');
+  }, 900);
 }
-function openChat() {
-  copyText($('viberTxt').textContent);
-  var n = viberNumber(S.viberPhone);
-  if (!n) return toast('Δεν υπάρχει κινητό γονέα');
-  toast('📋 Αντιγράφηκε. Στο Viber πάτα επικόλληση.', 3500);
-  setTimeout(function () { window.open('viber://chat?number=' + encodeURIComponent(n), '_top'); }, 600);
+function openWhatsApp() {
+  var t = $('viberTxt').textContent, n = viberNumber(S.viberPhone).replace('+', '');
+  var url = (n ? 'https://wa.me/' + n : 'https://wa.me/') + '?text=' + encodeURIComponent(t);
+  window.open(url, '_blank');
+}
+function shareMsg() {
+  var t = $('viberTxt').textContent;
+  if (navigator.share) {
+    navigator.share({ text: t }).catch(function () { copyText(t); });
+  } else { copyText(t); toast('📋 Αντιγράφηκε. Επικόλλησέ το όπου θέλεις.', 3500); }
 }
 
 /* ---------- Πρόγραμμα ---------- */
@@ -563,7 +573,8 @@ document.querySelector('#viewNew').addEventListener('change', recalc);
 $('saveBtn').onclick = function () { save(false); };
 $('copyBtn').onclick = function () { copyText($('viberTxt').textContent); };
 $('viberBtn').onclick = openViber;
-$('chatBtn').onclick = openChat;
+$('waBtn').onclick = openWhatsApp;
+$('shareBtn').onclick = shareMsg;
 $('newBtn').onclick = function () { resetForm(); showView('new'); };
 $('cancelEdit').onclick = function () { resetForm(); };
 $('showPast').onchange = loadList;
